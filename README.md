@@ -29,6 +29,9 @@ dir
 ---- stixels (results will be here)
 ```
 
+An example is provided, to run it type: `./stixels ./example 128`
+
+
 ## Related Publications
 
 [Embedded real-time stereo estimation via Semi-Global Matching on the GPU](http://www.sciencedirect.com/science/article/pii/S1877050916306561)
