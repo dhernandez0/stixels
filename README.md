@@ -78,7 +78,7 @@ ICCS2016 – International Conference on Computational Science 2016
 ## Limitations
 
 - Maximum image height can not be greather than 1024
-- Image height is equal or bigger than maximum disparity
+- Image height has to be equal or bigger than maximum disparity
 
 ## What to cite
 
