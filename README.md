@@ -10,6 +10,7 @@ Performance obtained measured in Frames Per Second (FPS):
 | NVIDIA Titan X  | 1000          |     581       |     373         |
 
 Results for example image (Input and Disparity):
+<img src="example/left/ap_000_29-02-2016_09-00-09_000002.png" width="250">
 ![Example image](example/left/ap_000_29-02-2016_09-00-09_000002.png "Example image" =250x)
 ![Example Disparity](example/disparities/ap_000_29-02-2016_09-00-09_000002.png "Example disparity" =250x)
 
