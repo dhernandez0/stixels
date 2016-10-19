@@ -9,6 +9,9 @@ Performance obtained measured in Frames Per Second (FPS):
 | NVIDIA Tegra X1 | 86.8          |    45.7       |     22.3        |
 | NVIDIA Titan X  | 1000          |     581       |     373         |
 
+Results for example image:
+![alt text](https://raw.githubusercontent.com/dhernandez0/stixels/master/example/left/ap_000_29-02-2016_09-00-09_000002.png "Example image")
+
 ## How to compile and test
 
 Simply use CMake and target the output directory as "build". In command line this would be (from the project root folder):
