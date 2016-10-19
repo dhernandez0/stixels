@@ -49,9 +49,11 @@ An example is provided, to run it type: `./stixels ./example 128`
 
 The output .stixel file has the following format:
 
+```
 1,612,767,6.92;2,611,314,15.34; .... # Column 0 (starting from left)
 2,758,767,0.08;2,757,300,11.34; .... # Column 1
 ...
+```
 
 Each line is a different column, and each stixel is separated by ";". The stixel format is:
 
