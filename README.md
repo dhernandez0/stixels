@@ -11,8 +11,8 @@ Performance obtained measured in Frames Per Second (FPS):
 
 Results for example image (Input and Disparity):
 
-<img src="example/left/ap_000_29-02-2016_09-00-09_000002.png" alt="Example input" width="40%">
-<img src="example/disparities/ap_000_29-02-2016_09-00-09_000002.png" alt="Example disparity" width="40%">
+<img src="example/left/ap_000_29-02-2016_09-00-09_000002.png" alt="Example input" width="45%">
+<img src="example/disparities/ap_000_29-02-2016_09-00-09_000002.png" alt="Example disparity" width="45%">
 
 Results for example image (Output):
 
