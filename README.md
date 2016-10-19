@@ -9,7 +9,7 @@ Performance obtained measured in Frames Per Second (FPS):
 | NVIDIA Tegra X1 | 86.8          |    45.7       |     22.3        |
 | NVIDIA Titan X  | 1000          |     581       |     373         |
 
-Results for example image (Input):
+Results for example image (Input and Disparity):
 ![Example image](https://raw.githubusercontent.com/dhernandez0/stixels/master/example/left/ap_000_29-02-2016_09-00-09_000002.png "Example image")
 ![Example Disparity](https://raw.githubusercontent.com/dhernandez0/stixels/master/example/disparities/ap_000_29-02-2016_09-00-09_000002.png "Example disparity")
 
@@ -45,6 +45,19 @@ dir
 
 An example is provided, to run it type: `./stixels ./example 128`
 
+## How to generate the output image:
+
+The output .stixel file has the following format:
+
+1,612,767,6.92;2,611,314,15.34; .... # Column 0 (starting from left)
+2,758,767,0.08;2,757,300,11.34; .... # Column 1
+...
+
+Each line is a different column, and each stixel is separated by ";". The stixel format is:
+
+Type (ground=0, object=1, sky=2), starting_row, end_row, mean_disparity
+
+In order to generate an image for this format, use the project ... (TODO: upload this project).
 
 ## Related Publications
 
