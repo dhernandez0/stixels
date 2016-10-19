@@ -9,8 +9,12 @@ Performance obtained measured in Frames Per Second (FPS):
 | NVIDIA Tegra X1 | 86.8          |    45.7       |     22.3        |
 | NVIDIA Titan X  | 1000          |     581       |     373         |
 
-Results for example image:
-![alt text](https://raw.githubusercontent.com/dhernandez0/stixels/master/example/left/ap_000_29-02-2016_09-00-09_000002.png "Example image")
+Results for example image (Input):
+![Example image](https://raw.githubusercontent.com/dhernandez0/stixels/master/example/left/ap_000_29-02-2016_09-00-09_000002.png "Example image")
+![Example Disparity](https://raw.githubusercontent.com/dhernandez0/stixels/master/example/disparities/ap_000_29-02-2016_09-00-09_000002.png "Example disparity")
+
+Results for example image (Output):
+![Example Disparity](https://raw.githubusercontent.com/dhernandez0/stixels/master/example/stixelsim/ap_000_29-02-2016_09-00-09_000002.png "Example output")
 
 ## How to compile and test
 
@@ -57,6 +61,7 @@ ICCS2016 – International Conference on Computational Science 2016
 ## Limitations
 
 - Maximum image height can not be greather than 1024
+- Image height is equal or bigger than maximum disparity
 
 ## What to cite
 
