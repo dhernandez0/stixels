@@ -2,6 +2,13 @@
 
 This is the implementation of [GPU-accelerated real-time stixel computation](https://arxiv.org/abs/1610.04124), [D. Hernandez-Juarez](http://www.cvc.uab.es/people/dhernandez/) et al.
 
+Frames Per Second (FPS) obtained using GPUs:
+
+|                 | 1280 x 240    |   640 x 480   |   1280 x 480    |
+| -------------   |:-------------:|:-------------:|:---------------:|
+| NVIDIA Tegra X1 | 86.8          |    45.7       |     22.3        |
+| NVIDIA Titan X  | 1000          |     581       |     373         |
+
 ## How to compile and test
 
 Simply use CMake and target the output directory as "build". In command line this would be (from the project root folder):
