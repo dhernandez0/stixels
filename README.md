@@ -61,7 +61,7 @@ Type (ground=0, object=1, sky=2), starting_row, end_row, mean_disparity
 
 Also, for convinience, the actual rows are rows-1-given_row.
 
-In order to generate an image for this format, use the project ... (TODO: upload this project).
+In order to generate an image for this format, use [this](https://github.com/dhernandez0/show_stixels/)
 
 ## Related Publications
 
