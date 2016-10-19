@@ -2,7 +2,7 @@
 
 This is the implementation of [GPU-accelerated real-time stixel computation](https://arxiv.org/abs/1610.04124), [D. Hernandez-Juarez](http://www.cvc.uab.es/people/dhernandez/) et al.
 
-Frames Per Second (FPS) obtained using GPUs:
+Performance obtained measured in Frames Per Second (FPS):
 
 |                 | 1280 x 240    |   640 x 480   |   1280 x 480    |
 | -------------   |:-------------:|:-------------:|:---------------:|
