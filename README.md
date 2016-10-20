@@ -33,7 +33,7 @@ make
 
 Type: `./stixels dir max_disparity`
 
-The arguments `max_disparity` is the maximum disparity of the given disparity images, there are lots of parameters you can set in "main.cu".
+The argument `max_disparity` is the maximum disparity of the given disparity images, there are lots of parameters you can set in "main.cu".
 
 `dir` is the name of the directory which needs this format:
 
