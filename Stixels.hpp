@@ -172,8 +172,6 @@ private:
 	pixel_t *m_valid;
 	float *m_log_lut;
 	float *m_obj_cost_lut;
-	float *m_prior_objfromground;
-	float *m_prior_objfromobj;
 
 	// Current column data
 	pixel_t *m_column;

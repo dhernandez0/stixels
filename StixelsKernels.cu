@@ -182,7 +182,10 @@ __inline__ __device__ float warp_prefix_sum(const int i, const int fn, const pix
 	const int lane = threadIdx.x % WARP_SIZE;
 	const int col = blockIdx.x;
 
-	const int dis = d_disparity[col*params.rows+i+lane];
+	int dis = 0;
+	if(i+lane < params.rows) {
+		dis = d_disparity[col*params.rows+i+lane];
+	}
 	float cost = d_obj_cost_lut[fn*params.max_dis+dis];
 	if(lane == 0) {
 		cost += add;

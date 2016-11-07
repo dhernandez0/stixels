@@ -167,6 +167,11 @@ int main(int argc, char *argv[]) {
 
 		if(!FileExists(stixel_file) || OVERWRITE) {
 			cv::Mat dis = cv::imread(dis_file, cv::IMREAD_UNCHANGED);
+			// Convert images to grayscale
+			if (dis.channels()>1) {
+				cv::cvtColor(dis, dis, CV_RGB2GRAY);
+			}
+
 			if(!dis.data) {
 				std::cerr << "Couldn't read the file " << dis_file << std::endl;
 				return EXIT_FAILURE;
@@ -187,10 +192,19 @@ int main(int argc, char *argv[]) {
 
 				CUDA_CHECK_RETURN(cudaMallocHost((void**)&im, rows*cols*sizeof(pixel_t)));
 			}
-			for(int i = 0; i < dis.rows; i++) {
-				for(int j = 0; j < dis.cols; j++) {
-					const pixel_t d = (float) dis.at<uint16_t>(i, j)/256.0f;
-					im[i*dis.cols+j] = d;
+			if(dis.depth() == CV_8U) {
+				for(int i = 0; i < dis.rows; i++) {
+					for(int j = 0; j < dis.cols; j++) {
+						const pixel_t d = (float) dis.at<uint8_t>(i, j);
+						im[i*dis.cols+j] = d;
+					}
+				}
+			} else {
+				for(int i = 0; i < dis.rows; i++) {
+					for(int j = 0; j < dis.cols; j++) {
+						const pixel_t d = (float) dis.at<uint16_t>(i, j)/256.0f;
+						im[i*dis.cols+j] = d;
+					}
 				}
 			}
 

@@ -158,8 +158,6 @@ void Stixels::Finish() {
 	delete[] m_inv_sigma2_object;
 	delete[] m_object_disparity_range;
 	delete[] m_obj_cost_lut;
-	delete[] m_prior_objfromground;
-	delete[] m_prior_objfromobj;
 	delete[] m_log_lut;
 
 	CUDA_CHECK_RETURN(cudaFree(d_disparity_big));
