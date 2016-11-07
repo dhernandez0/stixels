@@ -47,6 +47,19 @@ dir
 
 An example is provided, to run it type: `./stixels ./example 128`
 
+## Important Parameters:
+
+In order to make this code work for your images you should set the following parameters.
+
+Command line parameter:
+- Disparity: Maximum disparity of the disparity map, this depends on the stereo-pair cameras
+
+Other parameters (main.cu):
+- Focal: Depends on the cameras you are using
+- Baseline: Depends on the cameras you are using
+- Camera Center Y: Depends on the cameras you are using
+- Column Step: This is the width of the stixels, depends on what you want to do with stixels afterwards
+
 ## How to generate the output image:
 
 The output .stixel file has the following format:
