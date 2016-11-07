@@ -47,7 +47,7 @@ dir
 
 An example is provided, to run it type: `./stixels ./example 128`
 
-## Important Parameters:
+## Important Parameters
 
 In order to make this code work for your images you should set the following parameters.
 
@@ -60,7 +60,7 @@ Other parameters (main.cu):
 - Camera Center Y: Depends on the cameras you are using
 - Column Step: This is the width of the stixels, depends on what you want to do with stixels afterwards
 
-## How to generate the output image:
+## How to generate the output image
 
 The output .stixel file has the following format:
 
