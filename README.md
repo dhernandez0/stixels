@@ -55,10 +55,10 @@ Command line parameter:
 - Disparity: Maximum disparity of the disparity map, this depends on the stereo-pair cameras
 
 Other parameters (main.cu):
-- Focal: Depends on the cameras you are using
-- Baseline: Depends on the cameras you are using
-- Camera Center Y: Depends on the cameras you are using
-- Column Step: This is the width of the stixels, depends on what you want to do with stixels afterwards
+- Focal: Depends on the cameras you are using (in pixels)
+- Baseline: Depends on the cameras you are using (in meters)
+- Camera Center Y: Depends on the cameras you are using (in pixels)
+- Column Step: This is the width of the stixels, depends on what you want to do with stixels afterwards (in pixels)
 
 ## How to generate the output image
 
