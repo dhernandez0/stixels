@@ -47,7 +47,20 @@ dir
 
 An example is provided, to run it type: `./stixels ./example 128`
 
-## How to generate the output image:
+## Important Parameters
+
+In order to make this code work for your images you should set the following parameters.
+
+Command line parameter:
+- Disparity: Maximum disparity of the disparity map, this depends on the stereo-pair cameras
+
+Other parameters (main.cu):
+- Focal: Depends on the cameras you are using (in pixels)
+- Baseline: Depends on the cameras you are using (in meters)
+- Camera Center Y: Depends on the cameras you are using (in pixels)
+- Column Step: This is the width of the stixels, depends on what you want to do with stixels afterwards (in pixels)
+
+## How to generate the output image
 
 The output .stixel file has the following format:
 
@@ -79,7 +92,7 @@ ICCS2016 – International Conference on Computational Science 2016
 
 ## Limitations
 
-- Maximum image height can not be greather than 1024
+- Maximum image height has to be less than 1024
 - Image height has to be equal or bigger than maximum disparity
 
 ## What to cite
