@@ -167,20 +167,32 @@ int main(int argc, char *argv[]) {
 
 		if(!FileExists(stixel_file) || OVERWRITE) {
 			cv::Mat dis = cv::imread(dis_file, cv::IMREAD_UNCHANGED);
-			// Convert images to grayscale
-			if (dis.channels()>1) {
-				cv::cvtColor(dis, dis, CV_RGB2GRAY);
-			}
-
 			if(!dis.data) {
 				std::cerr << "Couldn't read the file " << dis_file << std::endl;
 				return EXIT_FAILURE;
+			}
+
+			// Convert images to grayscale
+			if (dis.channels()>1) {
+				cv::cvtColor(dis, dis, CV_RGB2GRAY);
 			}
 
 			std::cout << ep->d_name << std::endl;
 
 			const int rows = dis.rows;
 			const int cols = dis.cols;
+
+			if(rows < max_dis) {
+				printf("ERROR: Image height has to be equal or bigger than maximum disparity\n");
+				first_time = false;
+				continue;
+			}
+
+			if(rows >= 1024) {
+				printf("ERROR: Maximum image height has to be less than 1024\n");
+				first_time = false;
+				continue;
+			}
 
 			if(first_time) {
 				stixles.SetDisparityParameters(rows, cols, max_dis, sigma_disparity_object, sigma_disparity_ground, sigma_sky);
@@ -213,7 +225,7 @@ int main(int argc, char *argv[]) {
 
 			const bool ok = road_estimation.Compute(im);
 			if(!ok) {
-				printf("Can't compute\n");
+				printf("Can't compute road estimation\n");
 				first_time = false;
 				continue;
 			}
@@ -223,6 +235,12 @@ int main(int argc, char *argv[]) {
 			camera_height = road_estimation.GetCameraHeight();
 			vhor = road_estimation.GetHorizonPoint();
 			alpha_ground = road_estimation.GetSlope();
+
+			if(camera_tilt == 0 && camera_height == 0 && vhor == 0 && alpha_ground == 0) {
+				printf("Can't compute road estimation\n");
+				first_time = false;
+				continue;
+			}
 
 			std::cout << "Camera Parameters -> Tilt: " << camera_tilt << " Height: " << camera_height << " vHor: " << vhor << " alpha_ground: " << alpha_ground << std::endl;
 
