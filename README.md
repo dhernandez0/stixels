@@ -95,6 +95,11 @@ ICCS2016 – International Conference on Computational Science 2016
 - Maximum image height has to be less than 1024
 - Image height has to be equal or bigger than maximum disparity
 
+## Troubleshooting
+
+- Very fast execution and incorrect result: 
+This is usually an error related to the compute architecture used. Look at the CMakeLists.txt and change the architecture to the one you are using, please. If you run the application with nvprof you will see that it does not run any CUDA kernel.
+
 ## What to cite
 
 If you use this code for your research, please kindly cite:
