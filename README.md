@@ -1,6 +1,6 @@
 # GPU-accelerated real-time stixel computation
 
-This is the implementation of [GPU-accelerated real-time stixel computation](https://doi.org/10.1109/WACV.2017.122) [arxiv](https://arxiv.org/abs/1610.04124), [D. Hernandez-Juarez](http://www.cvc.uab.es/people/dhernandez/) et al.
+This is the implementation of [GPU-accelerated real-time stixel computation](https://doi.org/10.1109/WACV.2017.122) ([arxiv](https://arxiv.org/abs/1610.04124)), [D. Hernandez-Juarez](http://www.cvc.uab.es/people/dhernandez/) et al.
 
 Performance obtained measured in Frames Per Second (FPS):
 
