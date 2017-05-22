@@ -111,7 +111,7 @@ If you use this code for your research, please kindly cite:
                Juan C. Moure and
                David V{\'{a}}zquez and
                Antonio Manuel L{\'{o}}pez},
-  title     = {{GPU}-{A}ccelerated {R}eal-{T}ime {S}tixel {C}omputation},
+  title     = {{GPU}-Accelerated Real-Time Stixel Computation},
   booktitle = {2017 {IEEE} Winter Conference on Applications of Computer Vision,
                {WACV} 2017, Santa Rosa, CA, USA, March 24-31, 2017},
   pages     = {1054--1062},
