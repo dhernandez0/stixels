@@ -1,6 +1,6 @@
 # GPU-accelerated real-time stixel computation
 
-This is the implementation of [GPU-accelerated real-time stixel computation](https://arxiv.org/abs/1610.04124), [D. Hernandez-Juarez](http://www.cvc.uab.es/people/dhernandez/) et al.
+This is the implementation of [GPU-accelerated real-time stixel computation](https://doi.org/10.1109/WACV.2017.122) [arxiv](https://arxiv.org/abs/1610.04124), [D. Hernandez-Juarez](http://www.cvc.uab.es/people/dhernandez/) et al.
 
 Performance obtained measured in Frames Per Second (FPS):
 
@@ -105,17 +105,20 @@ This is usually an error related to the compute architecture used. Look at the C
 If you use this code for your research, please kindly cite:
 
 ```
-@article{stixels_gpu,
+@inproceedings{stixels_gpu,
   author    = {Daniel Hernandez-Juarez and
                Antonio Espinosa and
+               Juan C. Moure and
                David V{\'{a}}zquez and
-               Antonio M. L{\'{o}}pez and
-               Juan Carlos Moure},
-  title     = {{GPU}-accelerated real-time stixel computation},
-  journal   = {CoRR},
-  volume    = {abs/1610.04124},
-  year      = {2016},
-  url       = {http://arxiv.org/abs/1610.04124},
+               Antonio Manuel L{\'{o}}pez},
+  title     = {{GPU}-{A}ccelerated {R}eal-{T}ime {S}tixel {C}omputation},
+  booktitle = {2017 {IEEE} Winter Conference on Applications of Computer Vision,
+               {WACV} 2017, Santa Rosa, CA, USA, March 24-31, 2017},
+  pages     = {1054--1062},
+  year      = {2017},
+  url       = {https://doi.org/10.1109/WACV.2017.122},
+  doi       = {10.1109/WACV.2017.122},
 }
+
 
 ```
