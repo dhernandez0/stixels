@@ -81,7 +81,7 @@ In order to generate an image for this format, use [this](https://github.com/dhe
 ## Related Publications
 
 - [Slanted Stixels: Representing San Francisco’s Steepest Streets](https://arxiv.org/abs/1707.05397)
-[D. Hernandez-Juarez](http://www.cvc.uab.es/people/dhernandez/)*†, L. Schneider*, A. Espinosa, D. Vázquez, A. M. López, U. Franke, M. Pollefeys and J. C. Moure
+[D. Hernandez-Juarez](http://www.cvc.uab.es/people/dhernandez/)\*†, L. Schneider\*, A. Espinosa, D. Vázquez, A. M. López, U. Franke, M. Pollefeys and J. C. Moure
   - BMVC2017 – British Machine Vision Conference 2017
   - \* Both authors contributed equally † Work performed during an internship at Daimler AG
 
