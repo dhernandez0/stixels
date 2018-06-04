@@ -103,6 +103,8 @@ __inline__ __device__ int __emulated_shfl(const int scalarValue, const uint32_t 
 __inline__ __device__ int shfl_32(int scalarValue, const int lane) {
 	#if FERMI
 		return __emulated_shfl(scalarValue, (uint32_t)lane);
+	#elif (__CUDA_ARCH__ < 700)
+		return __shfl(scalarValue, lane);
 	#else
 		return __shfl_sync(0xFFFFFFFF, scalarValue, lane);
 	#endif
@@ -113,6 +115,8 @@ __inline__ __device__ int shfl_up_32(int scalarValue, const int n) {
 		int lane = threadIdx.x % WARP_SIZE;
 		lane -= n;
 		return shfl_32(scalarValue, lane);
+	#elif (__CUDA_ARCH__ < 700)
+		return __shfl_up(scalarValue, n);
 	#else
 		return __shfl_up_sync(0xFFFFFFFF, scalarValue, n);
 	#endif
@@ -123,6 +127,8 @@ __inline__ __device__ int shfl_down_32(int scalarValue, const int n) {
 		int lane = threadIdx.x % WARP_SIZE;
 		lane += n;
 		return shfl_32(scalarValue, lane);
+	#elif (__CUDA_ARCH__ < 700)
+		return __shfl_down(scalarValue, n);
 	#else
 		return __shfl_down_sync(0xFFFFFFFF, scalarValue, n);
 	#endif
@@ -133,6 +139,8 @@ __inline__ __device__ int shfl_xor_32(int scalarValue, const int n) {
 		int lane = threadIdx.x % WARP_SIZE;
 		lane = lane ^ n;
 		return shfl_32(scalarValue, lane);
+	#elif (__CUDA_ARCH__ < 700)
+		return __shfl_xor(scalarValue, n);
 	#else
 		return __shfl_xor_sync(0xFFFFFFFF, scalarValue, n);
 	#endif
@@ -438,7 +446,11 @@ __inline__ __device__ bool blockAny(bool local_condition) {
 	const int lane = threadIdx.x % WARP_SIZE;
 	const int wid = threadIdx.x / WARP_SIZE;
 
-	local_condition = __any_sync(0xFFFFFFFF, local_condition);     // Each warp performs __any
+	#if (__CUDA_ARCH__ < 700)
+		local_condition = __any(local_condition);     // Each warp performs __any
+	#else
+		local_condition = __any_sync(0xFFFFFFFF, local_condition);     // Each warp performs __any
+	#endif
 
 	if (lane==0) {
 		conditions[wid]=local_condition;
@@ -450,7 +462,11 @@ __inline__ __device__ bool blockAny(bool local_condition) {
 	local_condition = (threadIdx.x < blockDim.x / WARP_SIZE) ? conditions[lane] : false;
 
 	if (wid==0) {
-		local_condition = __any_sync(0xFFFFFFFF, local_condition); //Final __any within first warp
+		#if (__CUDA_ARCH__ < 700)
+			local_condition = __any(local_condition); //Final __any within first warp
+		#else
+			local_condition = __any_sync(0xFFFFFFFF, local_condition); //Final __any within first warp
+		#endif
 	}
 
 	return local_condition;
