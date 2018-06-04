@@ -193,14 +193,14 @@ __inline__ __device__ float warp_prefix_sum(const int i, const int fn, const pix
 
 	#pragma unroll
 	for (int j = 1; j <= WARP_SIZE; j *= 2) {
-		float n = __shfl_up(cost, j);
+		float n = __shfl_up_sync(0xFFFFFFFF, cost, j);
 
 		if (lane >= j) cost += n;
 	}
 
 	s_data[i+lane+1] = cost;
 
-	return __shfl(cost, WARP_SIZE-1);
+	return __shfl_sync(0xFFFFFFFF, cost, WARP_SIZE-1);
 }
 
 __inline__ __device__ void ComputePrefixSumWarp2(const int fn, const pixel_t* __restrict__ d_disparity,
