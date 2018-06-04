@@ -226,13 +226,13 @@ __global__ void StixelsKernel(const pixel_t* __restrict__ d_disparity, const Sti
 	const int row = threadIdx.x;
 
 	extern __shared__ int s[];
-	float *sky_lut = (float*)&s;											// rows+1
-	float *ground_lut = &sky_lut[params.rows_power2];						// rows+1
-	float *ground_function = &ground_lut[params.rows_power2];				// rows
+	float *sky_lut = (float*)&s;						// rows_power2
+	float *ground_lut = &sky_lut[params.rows_power2];			// rows_power2
+	float *ground_function = &ground_lut[params.rows_power2];		// rows_power2
 	float *object_disparity_range = &ground_function[params.rows_power2];	// max_dis
-	float *cost_table = &object_disparity_range[params.max_dis];			// rows*3
-	int16_t *index_table = (int16_t*)&cost_table[params.rows_power2*3];		// rows*3
-	pixel_t *sum = (pixel_t*) &index_table[params.rows_power2*3];			// rows+1
+	float *cost_table = &object_disparity_range[params.max_dis];		// rows_power2*3
+	int16_t *index_table = (int16_t*)&cost_table[params.rows_power2*3];	// rows_power2*3
+	pixel_t *sum = (pixel_t*) &index_table[params.rows_power2*3];		// rows_power2
 	pixel_t *valid = NULL;
 	pixel_t *column = NULL;
 
@@ -292,7 +292,14 @@ __global__ void StixelsKernel(const pixel_t* __restrict__ d_disparity, const Sti
 
 			// Compute data terms
 			const pixel_t obj_fn = ComputeMean(vB, vT, sum, valid, column);
-			const int obj_fni = (int) floorf(obj_fn);
+			// Sometimes obj_fni is negative O(1e-5). This means that in the
+			// prefix sum, there is a value which is larger that its
+			// predecessor. As all entries in "sum" are positive (disparities),
+			// this should not happen (I checked this.). I think this an 
+			// numeric issue of the "ComputePrefixSum" sum.
+			// NOTE: This also means that ground_lut and sky_lut might suffer
+			// from the same problem.
+			const int obj_fni = (obj_fn < 0) ? 0 : (int) floorf(obj_fn);
 
 			const float cost_ground_data = ground_lut[vT+1] - ground_lut[vB];
 			const float cost_object_data = d_object_lut[obj_data_idx+obj_fni*params.rows_power2+vT+1] -
@@ -330,7 +337,8 @@ __global__ void StixelsKernel(const pixel_t* __restrict__ d_disparity, const Sti
 
 			if(vT >= vB) {
 				const pixel_t obj_fn = ComputeMean(vB, vT, sum, valid, column);
-				const int obj_fni = (int) floorf(obj_fn);
+				// See obj_fni above.
+				const int obj_fni = (obj_fn < 0) ? 0 : (int) floorf(obj_fn);
 				const float cost_object_data = d_object_lut[obj_data_idx+obj_fni*params.rows_power2+vT+1] -
 						d_object_lut[obj_data_idx+obj_fni*params.rows_power2+vB];
 				const float prior_cost = GetPriorCost(vB, params.rows);
