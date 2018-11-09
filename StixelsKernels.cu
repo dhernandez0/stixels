@@ -55,13 +55,11 @@ __inline__ __device__ float GetPriorCostSkyFromObject(pixel_t previous_mean, con
 	return cost;
 }
 
-__inline__ __device__ float GetPriorCostSkyFromGround(const int vB, pixel_t previous_mean,
-		const int vhor, const float epsilon, float *ground_function, const float prior_cost) {
+__inline__ __device__ float GetPriorCostSkyFromGround(const int vB, float *ground_function, const float prior_cost) {
 	const int previous_vT = vB-1;
 
-	// FIXME: No tengo claro que sea asi
 	const float prev_gf = ground_function[previous_vT];
-	const float cost = (prev_gf == 0.0f) ? prior_cost : MAX_LOGPROB;
+	const float cost = (prev_gf < 1) ? prior_cost : MAX_LOGPROB;
 
 	return cost;
 }
@@ -76,15 +74,17 @@ __inline__ __device__ float ComputeObjectDisparityRange(const float previous_mea
 	return range_disp;
 }
 
-__inline__ __device__ float GetPriorCostObjectFromGround(const int vB, float fn, const pixel_t previous_mean,
-		const float *prior_objfromground, const int max_dis, const float max_disf,
-		const float *ground_function, const float prior_cost, const float epsilon, const float pgrav,
-		const float pblg) {
+__inline__ __device__ float GetPriorCostObjectFromGround(const int vB, float fn,
+		const float max_disf, const float *ground_function, const float prior_cost,
+		const float epsilon, const float pgrav, const float pblg) {
 	float cost = -logf(0.7f) + prior_cost;
 
 
 	const int previous_vT = vB-1;
-	const float fn_previous = ground_function[previous_vT];
+	float fn_previous = ground_function[previous_vT];
+	if(fn_previous < 0.0f) {
+		fn_previous = 0.0f;
+	}
 
 	if(fn > (fn_previous+epsilon)) {
 		// It should not be 0, fn_previous could be almost m_max_dis-1 but m_epsilon should be small
@@ -100,14 +100,17 @@ __inline__ __device__ float GetPriorCostObjectFromGround(const int vB, float fn,
 }
 
 __inline__ __device__ float GetPriorCostObjectFromObject(const int vB, const float fn,
-		const pixel_t previous_mean, float *prior_objfromobj, const float *object_disparity_range,
-		const int vhor, const int max_dis, const float max_disf, const float pord, const float prior_cost) {
+		const pixel_t previous_mean, const float *object_disparity_range,
+		const int vhor, const float max_disf, const float pord, const float prior_cost) {
 	const int previous_vT = vB-1;
 	float cost = (previous_vT < vhor) ? -logf(0.7f) : logf(2.0f);
 	cost += prior_cost;
 
 
-	const float dif_dis = object_disparity_range[(int) previous_mean];
+	float dif_dis = object_disparity_range[(int) previous_mean];
+	if(dif_dis < 0.0f) {
+		dif_dis = 0.0f;
+	}
 
 	if(fn > (previous_mean+dif_dis)) {
 		// It should not be 0, previous_mean could be almost m_max_dis-1 but dif_dis should be small
@@ -244,10 +247,6 @@ __global__ void StixelsKernel(const pixel_t* __restrict__ d_disparity, const Sti
 	pixel_t *valid = NULL;
 	pixel_t *column = NULL;
 
-	float *prior_objfromground = NULL;
-	float *prior_objfromobj = NULL;
-
-
 	if(row < params.rows) {
 		const pixel_t d = d_disparity[col*params.rows+row];
 
@@ -299,15 +298,18 @@ __global__ void StixelsKernel(const pixel_t* __restrict__ d_disparity, const Sti
 			__syncthreads();
 
 			// Compute data terms
-			const pixel_t obj_fn = ComputeMean(vB, vT, sum, valid, column);
-			// Sometimes obj_fni is negative O(1e-5). This means that in the
+			pixel_t obj_fn = ComputeMean(vB, vT, sum, valid, column);
+			// Sometimes obj_fn is negative O(1e-5). This means that in the
 			// prefix sum, there is a value which is larger that its
 			// predecessor. As all entries in "sum" are positive (disparities),
-			// this should not happen (I checked this.). I think this an 
+			// this should not happen (I checked this.). I think this an
 			// numeric issue of the "ComputePrefixSum" sum.
 			// NOTE: This also means that ground_lut and sky_lut might suffer
 			// from the same problem.
-			const int obj_fni = (obj_fn < 0) ? 0 : (int) floorf(obj_fn);
+			if(obj_fn < 0) {
+				obj_fn = 0;
+			}
+			const int obj_fni = (int) floorf(obj_fn);
 
 			const float cost_ground_data = ground_lut[vT+1] - ground_lut[vB];
 			const float cost_object_data = d_object_lut[obj_data_idx+obj_fni*params.rows_power2+vT+1] -
@@ -344,9 +346,12 @@ __global__ void StixelsKernel(const pixel_t* __restrict__ d_disparity, const Sti
 			__syncthreads();
 
 			if(vT >= vB) {
-				const pixel_t obj_fn = ComputeMean(vB, vT, sum, valid, column);
+				pixel_t obj_fn = ComputeMean(vB, vT, sum, valid, column);
 				// See obj_fni above.
-				const int obj_fni = (obj_fn < 0) ? 0 : (int) floorf(obj_fn);
+				if(obj_fn < 0) {
+					obj_fn = 0;
+				}
+				const int obj_fni = (int) floorf(obj_fn);
 				const float cost_object_data = d_object_lut[obj_data_idx+obj_fni*params.rows_power2+vT+1] -
 						d_object_lut[obj_data_idx+obj_fni*params.rows_power2+vB];
 				const float prior_cost = GetPriorCost(vB, params.rows);
@@ -354,7 +359,10 @@ __global__ void StixelsKernel(const pixel_t* __restrict__ d_disparity, const Sti
 				const int previous_vT = vB-1;
 				const bool below_vhor_vTprev = previous_vT < params.vhor;
 				const int previous_object_vB = index_table[previous_vT*3+OBJECT] / 3;
-				const pixel_t previous_mean = ComputeMean(previous_object_vB, previous_vT, sum, valid, column);
+				pixel_t previous_mean = ComputeMean(previous_object_vB, previous_vT, sum, valid, column);
+				if(previous_mean < 0) {
+					previous_mean = 0;
+				}
 
 				if(below_vhor_vTprev) {
 					// Ground
@@ -380,8 +388,8 @@ __global__ void StixelsKernel(const pixel_t* __restrict__ d_disparity, const Sti
 					const float cost_sky_data = sky_lut[vT+1] - sky_lut[vB];
 					const int index_psky = vT*3+SKY;
 
-					const float cost_sky_prior1 = GetPriorCostSkyFromGround(vB, previous_mean, params.vhor,
-							params.epsilon, ground_function, prior_cost) + cost_table[previous_vT*3+GROUND];
+					const float cost_sky_prior1 = GetPriorCostSkyFromGround(vB, ground_function, prior_cost)
+							+ cost_table[previous_vT*3+GROUND];
 
 					const float cost_sky_prior2 = GetPriorCostSkyFromObject(previous_mean, params.epsilon,
 							prior_cost) + cost_table[previous_vT*3+OBJECT];
@@ -401,13 +409,14 @@ __global__ void StixelsKernel(const pixel_t* __restrict__ d_disparity, const Sti
 				// Object
 				const int index_pobject = vT*3+OBJECT;
 
-				const float cost_object_prior1 = GetPriorCostObjectFromGround(vB, obj_fn, previous_mean,
-						prior_objfromground, params.max_dis, max_disf, ground_function, prior_cost,
-						params.epsilon, params.pgrav, params.pblg) + cost_table[previous_vT*3+GROUND];
+				const float cost_object_prior1 = GetPriorCostObjectFromGround(vB, obj_fn,
+						max_disf, ground_function, prior_cost, params.epsilon,
+						params.pgrav, params.pblg) + cost_table[previous_vT*3+GROUND];
 
-				const float cost_object_prior2 = GetPriorCostObjectFromObject(vB, obj_fn, previous_mean,
-						prior_objfromobj, object_disparity_range, params.vhor, params.max_dis, max_disf,
+				const float cost_object_prior2 = GetPriorCostObjectFromObject(vB, obj_fn,
+						previous_mean, object_disparity_range, params.vhor, max_disf,
 						params.pord, prior_cost) + cost_table[previous_vT*3+OBJECT];
+
 				const float cost_object_prior3 = GetPriorCostObjectFromSky(obj_fn, max_disf, prior_cost,
 						params.epsilon) + cost_table[previous_vT*3+SKY];
 
