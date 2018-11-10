@@ -290,7 +290,7 @@ __global__ void StixelsKernel(const pixel_t* __restrict__ d_disparity, const Sti
 		const float max_disf = (float) params.max_dis;
 
 		const int vT = row;
-		const int obj_data_idx = col*params.rows_power2*params.max_dis;
+		const int obj_data_idx = col*(params.rows_power2+1)*params.max_dis;
 
 		// First segment: Special case vB = 0
 		{
@@ -312,8 +312,8 @@ __global__ void StixelsKernel(const pixel_t* __restrict__ d_disparity, const Sti
 			const int obj_fni = (int) floorf(obj_fn);
 
 			const float cost_ground_data = ground_lut[vT+1] - ground_lut[vB];
-			const float cost_object_data = d_object_lut[obj_data_idx+obj_fni*params.rows_power2+vT+1] -
-					d_object_lut[obj_data_idx+obj_fni*params.rows_power2+vB];
+			const float cost_object_data = d_object_lut[obj_data_idx+obj_fni*(params.rows_power2+1)+vT+1] -
+					d_object_lut[obj_data_idx+obj_fni*(params.rows_power2+1)+vB];
 
 			// Compute priors costs
 			const int index_pground = vT*3+GROUND;
@@ -352,8 +352,8 @@ __global__ void StixelsKernel(const pixel_t* __restrict__ d_disparity, const Sti
 					obj_fn = 0;
 				}
 				const int obj_fni = (int) floorf(obj_fn);
-				const float cost_object_data = d_object_lut[obj_data_idx+obj_fni*params.rows_power2+vT+1] -
-						d_object_lut[obj_data_idx+obj_fni*params.rows_power2+vB];
+				const float cost_object_data = d_object_lut[obj_data_idx+obj_fni*(params.rows_power2+1)+vT+1] -
+						d_object_lut[obj_data_idx+obj_fni*(params.rows_power2+1)+vB];
 				const float prior_cost = GetPriorCost(vB, params.rows);
 
 				const int previous_vT = vB-1;
@@ -488,7 +488,7 @@ __global__ void ComputeObjectLUT(const pixel_t* __restrict__ d_disparity,
 	const int blck_step = blockDim.x / WARP_SIZE;
 	for(int fn = warp_id; fn < params.max_dis; fn += blck_step) {
 		ComputePrefixSumWarp2(fn, d_disparity, d_obj_cost_lut, params,
-				&d_object_lut[col*params.rows_power2*params.max_dis+fn*params.rows_power2],
+				&d_object_lut[col*(params.rows_power2+1)*params.max_dis+fn*(params.rows_power2+1)],
 				params.rows, n_power2);
 	}
 }

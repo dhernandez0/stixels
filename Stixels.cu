@@ -103,7 +103,7 @@ void Stixels::Initialize() {
 	CUDA_CHECK_RETURN(cudaMalloc((void **)&d_normalization_ground, m_rows*sizeof(float)));
 	CUDA_CHECK_RETURN(cudaMalloc((void **)&d_inv_sigma2_ground, m_rows*sizeof(float)));
 	CUDA_CHECK_RETURN(cudaMalloc((void **)&d_object_disparity_range, m_max_dis*sizeof(float)));
-	CUDA_CHECK_RETURN(cudaMalloc((void **)&d_object_lut, (rows_power2*m_realcols*m_max_dis+1)*sizeof(float)));
+	CUDA_CHECK_RETURN(cudaMalloc((void **)&d_object_lut, (rows_power2+1)*m_realcols*m_max_dis*sizeof(float)));
 	CUDA_CHECK_RETURN(cudaMalloc((void **)&d_obj_cost_lut, m_max_dis*m_max_dis*sizeof(float)));
 
 	CUDA_CHECK_RETURN(cudaMemcpy(d_object_disparity_range, m_object_disparity_range, sizeof(float)*m_max_dis,
