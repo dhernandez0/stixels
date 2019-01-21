@@ -1,6 +1,6 @@
 # GPU-accelerated real-time stixel computation
 
-This is the implementation of [GPU-accelerated real-time stixel computation](https://doi.org/10.1109/WACV.2017.122) ([arxiv](https://arxiv.org/abs/1610.04124)), [D. Hernandez-Juarez](http://www.cvc.uab.es/people/dhernandez/) et al.
+This is the implementation of [GPU-accelerated real-time stixel computation](https://doi.org/10.1109/WACV.2017.122) ([arxiv](https://arxiv.org/abs/1610.04124)), [D. Hernandez-Juarez](http://danihernandez.eu) et al.
 
 Performance obtained measured in Frames Per Second (FPS):
 
@@ -81,12 +81,12 @@ In order to generate an image for this format, use [this](https://github.com/dhe
 ## Related Publications
 
 - [Slanted Stixels: Representing San Francisco’s Steepest Streets](https://arxiv.org/abs/1707.05397)
-[D. Hernandez-Juarez](http://www.cvc.uab.es/people/dhernandez/)\*†, L. Schneider\*, A. Espinosa, D. Vázquez, A. M. López, U. Franke, M. Pollefeys and J. C. Moure
+[D. Hernandez-Juarez](http://danihernandez.eu)\*†, L. Schneider\*, A. Espinosa, D. Vázquez, A. M. López, U. Franke, M. Pollefeys and J. C. Moure
   - BMVC2017 – British Machine Vision Conference 2017
   - \* Both authors contributed equally † Work performed during an internship at Daimler AG
 
 - [Embedded real-time stereo estimation via Semi-Global Matching on the GPU](http://www.sciencedirect.com/science/article/pii/S1877050916306561)
-[D. Hernandez-Juarez](http://www.cvc.uab.es/people/dhernandez/), A. Chacón, A. Espinosa, D. Vázquez, J. C. Moure, and A. M. López
+[D. Hernandez-Juarez](http://danihernandez.eu), A. Chacón, A. Espinosa, D. Vázquez, J. C. Moure, and A. M. López
   - ICCS2016 – International Conference on Computational Science 2016
 
 ## Requirements
