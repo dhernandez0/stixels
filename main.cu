@@ -174,7 +174,7 @@ int main(int argc, char *argv[]) {
 
 			// Convert images to grayscale
 			if (dis.channels()>1) {
-				cv::cvtColor(dis, dis, CV_RGB2GRAY);
+				cv::cvtColor(dis, dis, cv::COLOR_RGB2GRAY);
 			}
 
 			std::cout << ep->d_name << std::endl;
